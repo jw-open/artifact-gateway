@@ -17,6 +17,10 @@ class ExternalCallRequest(BaseModel):
     body: Optional[Any] = Field(
         default=None, description="JSON-serialisable request body"
     )
+    credential_id: Optional[str] = Field(
+        default=None,
+        description="Name of a stored credential to resolve and inject (no plaintext secrets in app code)",
+    )
 
     @field_validator("method")
     @classmethod
@@ -105,6 +109,31 @@ class MongoDeleteRequest(BaseModel):
     filter: Dict[str, Any] = Field(
         ..., description="Filter to match documents to delete"
     )
+
+
+class FileWriteRequest(BaseModel):
+    """Request body for the file write endpoint."""
+
+    path: str = Field(..., description="Relative path within the workspace scope")
+    content: str = Field(..., description="Text content to write")
+
+
+class FileReadRequest(BaseModel):
+    """Request body for the file read endpoint."""
+
+    path: str = Field(..., description="Relative path within the workspace scope")
+
+
+class FileListRequest(BaseModel):
+    """Request body for the file list endpoint."""
+
+    path: str = Field(default="", description="Relative directory path (empty = root)")
+
+
+class FileDeleteRequest(BaseModel):
+    """Request body for the file delete endpoint."""
+
+    path: str = Field(..., description="Relative path within the workspace scope")
 
 
 class AppTokenClaims(BaseModel):

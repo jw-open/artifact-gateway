@@ -159,6 +159,61 @@ await handler.upsert("user", user_id, "notes",
 await handler.delete("user", user_id, "notes", filter={"archived": True})
 ```
 
+### 7. Credential vault — reference secrets by name
+
+Artifact apps should never embed plaintext API keys. Store the secret encrypted, then have the app reference it by name; the gateway resolves and injects it on the outbound request.
+
+```python
+from artifact_gateway import CredentialVault, apply_credential, PLACEMENT_BEARER
+
+vault = CredentialVault(master_key="your-encryption-key")
+
+# At save time (store ciphertext in your DB):
+ciphertext = vault.encrypt("sk-live-abc123")
+
+# At request time, resolve and inject:
+secret = vault.decrypt(ciphertext)
+headers, query = apply_credential(secret=secret, placement=PLACEMENT_BEARER)
+# headers = {"Authorization": "Bearer sk-live-abc123"}
+```
+
+`placement` can be `"bearer"`, `"header"` (with `name="X-Api-Key"`), or `"query"` (with `name="api_key"`).
+
+### 8. Files — user/session-isolated read & write
+
+```python
+from artifact_gateway import FilesHandler
+
+files = FilesHandler(root="/var/ohwise/workspaces")
+
+await files.write("user", user_id, "exports/report.csv", "a,b\n1,2\n")
+out = await files.read("user", user_id, "exports/report.csv")
+await files.list("user", user_id, "exports")
+await files.delete("user", user_id, "exports/report.csv")
+```
+
+Paths are confined to the user's (or session's) directory; traversal outside it raises `ValueError`.
+
+### 9. Streaming external proxy
+
+```python
+proxy = ExternalProxy()
+async for chunk in proxy.stream(
+    scope=claims["scope"], method="POST",
+    url="https://api.anthropic.com/v1/messages",
+    headers={"x-api-key": "..."}, body={...},
+):
+    relay_to_client(chunk)  # e.g. as SSE
+```
+
+### 10. Refresh a token
+
+```python
+from artifact_gateway import refresh_app_token
+
+fresh = refresh_app_token(secret_key, old_token)  # same claims, new exp
+```
+
 ---
 
 ## Concepts

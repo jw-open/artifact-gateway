@@ -2,7 +2,7 @@
 from __future__ import annotations
 
 import logging
-from typing import Any, Dict, List, Optional
+from typing import Any, AsyncIterator, Dict, List, Optional
 
 import httpx
 
@@ -99,3 +99,48 @@ class ExternalProxy:
             "headers": dict(response.headers),
             "body": body_out,
         }
+
+    async def stream(
+        self,
+        *,
+        scope: List[str],
+        method: str,
+        url: str,
+        headers: Optional[Dict[str, str]] = None,
+        body: Optional[Any] = None,
+    ) -> AsyncIterator[bytes]:
+        """Proxy an external HTTPS call, yielding the response body in chunks.
+
+        Use this for streaming upstreams (e.g. LLM token streams). The caller is
+        responsible for relaying chunks to the client (e.g. as SSE).
+
+        Args:
+            scope: Token scope claims from the validated app token.
+            method: HTTP method.
+            url: Target HTTPS URL. Must begin with ``https://``.
+            headers: Optional headers to forward (never the OhWise JWT).
+            body: Optional JSON-serialisable request body.
+
+        Yields:
+            Raw response body chunks as ``bytes``.
+
+        Raises:
+            PermissionError: If scope is insufficient or the URL is not HTTPS.
+        """
+        self._require_scope(scope)
+        if not url.startswith("https://"):
+            raise PermissionError(
+                "Only HTTPS URLs are permitted for external proxy calls"
+            )
+
+        logger.debug("ExternalProxy.stream: %s %s", method.upper(), url)
+
+        async with httpx.AsyncClient(timeout=self.timeout) as client:
+            async with client.stream(
+                method=method.upper(),
+                url=url,
+                headers=headers or {},
+                json=body,
+            ) as response:
+                async for chunk in response.aiter_bytes():
+                    yield chunk

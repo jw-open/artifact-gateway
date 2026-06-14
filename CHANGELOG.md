@@ -1,5 +1,16 @@
 # Changelog
 
+## [0.2.0] - 2026-06-14
+
+### Added
+
+- **Credential vault** (`CredentialVault`) — AES-256-GCM encryption for named external credentials so artifact apps reference secrets by name instead of embedding plaintext. Includes `apply_credential()` to inject a resolved secret as a bearer token, custom header, or query parameter.
+- **Files handler** (`FilesHandler`) — user/session-isolated file read/write/list/delete with path-traversal protection and a configurable per-file size cap.
+- **Streaming external proxy** — `ExternalProxy.stream()` async generator for relaying streaming upstreams (e.g. LLM token streams) chunk-by-chunk.
+- **App token refresh** (`refresh_app_token`) — re-issue a fresh token from a still-valid one, preserving all claims, for long-running sessions.
+- New request models: `FileWriteRequest`, `FileReadRequest`, `FileListRequest`, `FileDeleteRequest`; `ExternalCallRequest.credential_id` field.
+- Tests for vault and files modules.
+
 ## [0.1.0] - 2026-06-13
 
 ### Added

@@ -110,6 +110,38 @@ def validate_app_token(secret_key: str, token: str) -> dict:
         raise ValueError(f"Invalid app token: {exc}")
 
 
+def refresh_app_token(
+    secret_key: str,
+    token: str,
+    ttl: int = DEFAULT_TTL,
+) -> str:
+    """Re-issue a fresh app token from a still-valid one.
+
+    Validates the incoming token, then mints a new token carrying the same
+    claims (``user_id``, ``account_id``, ``context``, ``scope``, and any extra
+    fields such as ``user_jwt``) with a fresh ``iat``/``exp``. Use this to keep
+    long-running artifact sessions alive without re-running issuance.
+
+    Args:
+        secret_key: The signing secret (same as issuance).
+        token: An existing, non-expired app token.
+        ttl: Lifetime for the new token in seconds.
+
+    Returns:
+        A newly signed JWT string.
+
+    Raises:
+        ValueError: If the supplied token is expired or invalid.
+    """
+    claims = validate_app_token(secret_key, token)
+    now = int(time.time())
+    reserved = {"iat", "exp"}
+    payload = {k: v for k, v in claims.items() if k not in reserved}
+    payload["iat"] = now
+    payload["exp"] = now + ttl
+    return jwt.encode(payload, secret_key, algorithm="HS256")
+
+
 def scope_from_role(role: str) -> List[str]:
     """Derive app token scope list from a user's RBAC role string.
 
