@@ -1,5 +1,5 @@
 /**
- * artifact-gateway-sdk — browser client for artifact-gateway.
+ * artifact-sdk — browser client for artifact-gateway.
  *
  * An AI-generated artifact (HTML/JS running in a sandboxed iframe) uses this to
  * make secure, RBAC-scoped calls back through the gateway: external HTTPS APIs

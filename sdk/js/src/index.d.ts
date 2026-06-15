@@ -1,4 +1,4 @@
-/** artifact-gateway-sdk — type declarations. */
+/** artifact-sdk — type declarations. */
 
 export interface ExternalRequest {
   method?: "GET" | "POST" | "PUT" | "PATCH" | "DELETE";

@@ -1,4 +1,4 @@
-# artifact-gateway-sdk
+# artifact-sdk
 
 Browser client SDK for [**artifact-gateway**](https://github.com/jw-open/artifact-gateway) — the secure proxy for AI-generated artifact web apps.
 
@@ -16,13 +16,13 @@ The server side is the Python package [`artifact-gateway`](https://pypi.org/proj
 ## Install
 
 ```bash
-npm install artifact-gateway-sdk
+npm install artifact-sdk
 ```
 
 Or load directly in an artifact via CDN (no build step):
 
 ```html
-<script src="https://cdn.jsdelivr.net/npm/artifact-gateway-sdk/dist/artifact-gateway-sdk.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/artifact-sdk/dist/artifact-sdk.js"></script>
 ```
 
 ## How it works
@@ -39,7 +39,7 @@ iframe.contentWindow.postMessage(
 Inside the artifact, the SDK captures the token (held **in memory only**) and exposes `window.artifactGateway`:
 
 ```html
-<script src="https://cdn.jsdelivr.net/npm/artifact-gateway-sdk/dist/artifact-gateway-sdk.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/artifact-sdk/dist/artifact-sdk.js"></script>
 <script>
   // The token may arrive after your scripts run — gate calls on _onReady.
   window.artifactGateway._onReady = async () => {
@@ -58,7 +58,7 @@ Inside the artifact, the SDK captures the token (held **in memory only**) and ex
 ## Programmatic (bundlers)
 
 ```js
-import { createClient } from "artifact-gateway-sdk";
+import { createClient } from "artifact-sdk";
 
 const gw = createClient({ token, proxyBase: "/api/app/" });
 const rows = await gw.db.userQuery("analytics", "SELECT * FROM events WHERE ts > ?", ["2026-01-01"]);
