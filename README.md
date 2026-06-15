@@ -21,6 +21,8 @@ AI agents (Claude Code, Codex, Gemini CLI) can produce interactive web apps — 
 - **DuckDB handler** — per-user and per-session isolated DuckDB files on the local filesystem.
 - **MongoDB handler** — per-user and per-session isolated MongoDB collections via Motor.
 
+> **Browser client SDK:** the matching client that artifact apps load in the iframe lives in [`js/`](js/) and is published to npm as **[`artifact-gateway-sdk`](https://www.npmjs.com/package/artifact-gateway-sdk)** (`npm i artifact-gateway-sdk`, or via CDN). This Python package is the server half; the JS SDK is the client half.
+
 ---
 
 ## Installation

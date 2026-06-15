@@ -1,0 +1,34 @@
+{
+  "name": "artifact-gateway-sdk",
+  "version": "0.1.0",
+  "description": "Browser client SDK for artifact-gateway — secure proxy calls (external APIs, internal APIs, isolated DBs, files, code-run) from AI-generated artifact web apps running in sandboxed iframes.",
+  "type": "module",
+  "main": "./src/index.js",
+  "module": "./src/index.js",
+  "types": "./src/index.d.ts",
+  "browser": "./dist/artifact-gateway-sdk.js",
+  "unpkg": "./dist/artifact-gateway-sdk.js",
+  "jsdelivr": "./dist/artifact-gateway-sdk.js",
+  "exports": {
+    ".": {
+      "types": "./src/index.d.ts",
+      "import": "./src/index.js"
+    },
+    "./global": "./dist/artifact-gateway-sdk.js",
+    "./dist/artifact-gateway-sdk.js": "./dist/artifact-gateway-sdk.js"
+  },
+  "files": ["dist", "src", "README.md", "LICENSE"],
+  "sideEffects": ["./dist/artifact-gateway-sdk.js"],
+  "scripts": {
+    "test": "node --test"
+  },
+  "keywords": [
+    "artifact-gateway", "sdk", "ai", "agent", "artifact", "iframe",
+    "proxy", "rbac", "llm", "sandbox"
+  ],
+  "homepage": "https://github.com/jw-open/artifact-gateway#readme",
+  "repository": { "type": "git", "url": "git+https://github.com/jw-open/artifact-gateway.git", "directory": "js" },
+  "bugs": { "url": "https://github.com/jw-open/artifact-gateway/issues" },
+  "license": "Apache-2.0",
+  "author": "jw-open"
+}
