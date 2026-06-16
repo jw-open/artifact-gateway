@@ -1,6 +1,6 @@
 {
   "name": "artifact-sdk",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Browser client SDK for artifact-gateway — secure proxy calls (external APIs, internal APIs, isolated DBs, files, code-run) from AI-generated artifact web apps running in sandboxed iframes.",
   "type": "module",
   "main": "./src/index.js",

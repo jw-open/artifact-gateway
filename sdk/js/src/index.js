@@ -104,14 +104,31 @@ export function autoInstall() {
   client._onReady = null;
   window.artifactGateway = client;
   window.ohwise = client;
+  let got = false;
   window.addEventListener("message", (e) => {
     const d = e && e.data;
     if (d && (d.type === "artifact-gateway:init" || d.type === "ohwise:init")) {
+      got = true;
+      if (readyTimer) { clearInterval(readyTimer); readyTimer = null; }
       client.setToken(d.token);
       client.setProxyBase(d.proxyBase);
       if (typeof client._onReady === "function") client._onReady();
     }
   });
+  // Handshake: announce readiness so the host posts the token regardless of load
+  // timing (its one-shot init post can race with module load / iframe mount).
+  const announce = () => {
+    if (got) return;
+    const msg = { type: "artifact-gateway:ready" };
+    try { if (window.parent && window.parent !== window) window.parent.postMessage(msg, "*"); } catch { /* noop */ }
+    try { if (window.opener) window.opener.postMessage(msg, "*"); } catch { /* noop */ }
+  };
+  let tries = 0;
+  let readyTimer = setInterval(() => {
+    if (got || ++tries > 40) { clearInterval(readyTimer); readyTimer = null; return; }
+    announce();
+  }, 150);
+  announce();
   return client;
 }
 
