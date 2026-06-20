@@ -1,5 +1,5 @@
 """artifact-gateway — Secure API gateway for AI-generated artifact apps."""
-__version__ = "0.2.0"
+__version__ = "0.3.0"
 
 from artifact_gateway.token import (
     issue_app_token,
@@ -17,6 +17,7 @@ from artifact_gateway.vault import (
     PLACEMENT_QUERY,
 )
 from artifact_gateway.files import FilesHandler
+from artifact_gateway.db.state import StateStore, VersionConflict, tenant_key
 from artifact_gateway.models import (
     ExternalCallRequest,
     InternalCallRequest,
@@ -46,6 +47,9 @@ __all__ = [
     "PLACEMENT_HEADER",
     "PLACEMENT_QUERY",
     "FilesHandler",
+    "StateStore",
+    "VersionConflict",
+    "tenant_key",
     "ExternalCallRequest",
     "InternalCallRequest",
     "DBQueryRequest",

@@ -47,6 +47,17 @@ export interface ArtifactGatewayClient {
     sessionList(path?: string): Promise<{ entries: Array<{ name: string; bytes: number | null }> }>;
     sessionDelete(path: string): Promise<{ ok: boolean }>;
   };
+  /**
+   * Recommended store for interactive apps: per-resource current state (versioned
+   * upsert) plus an append-only history. Persist here, never localStorage.
+   */
+  state: {
+    set(ns: string, resourceId: string, patch: Record<string, unknown>, expectedVersion?: number): Promise<{ ok: boolean; version: number }>;
+    get(ns: string, resourceId: string): Promise<{ data: Record<string, unknown> | null }>;
+    list(ns: string, filter?: Record<string, unknown>): Promise<{ data: unknown[]; count: number }>;
+    remove(ns: string, resourceId: string): Promise<{ ok: boolean; deleted: number }>;
+    history(ns: string, resourceId?: string, limit?: number): Promise<{ data: unknown[]; count: number }>;
+  };
   /** Set this to run code once the host delivers the token (browser auto-install). */
   _onReady?: (() => void) | null;
 }

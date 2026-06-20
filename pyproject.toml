@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "artifact-gateway"
-version = "0.2.0"
+version = "0.3.0"
 description = "Secure API gateway for AI-generated artifact apps — external proxy, internal API forwarding, and user-isolated database access with JWT-scoped auth tokens."
 readme = "README.md"
 license = {file = "LICENSE"}

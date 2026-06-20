@@ -88,6 +88,19 @@ export function createClient({ token = null, proxyBase = "/api/app/" } = {}) {
       sessionList: (path) => proxyFetch("files/session/list", { path: path || "" }),
       sessionDelete: (path) => proxyFetch("files/session/delete", { path }),
     },
+    // Recommended store for interactive apps: per-resource current state (versioned
+    // upsert) + append-only history. Persist here, never localStorage.
+    state: {
+      set: (ns, resourceId, patch, expectedVersion) => {
+        const body = { resource_id: resourceId, patch: patch || {} };
+        if (expectedVersion !== undefined && expectedVersion !== null) body.expected_version = expectedVersion;
+        return proxyFetch("state/" + ns + "/set", body);
+      },
+      get: (ns, resourceId) => proxyFetch("state/" + ns + "/get", { resource_id: resourceId }),
+      list: (ns, filter) => proxyFetch("state/" + ns + "/list", { filter: filter || {} }),
+      remove: (ns, resourceId) => proxyFetch("state/" + ns + "/delete", { resource_id: resourceId }),
+      history: (ns, resourceId, limit) => proxyFetch("state/" + ns + "/events", { resource_id: resourceId || null, limit: limit || 100 }),
+    },
   };
 }
 
