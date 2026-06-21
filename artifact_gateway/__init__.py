@@ -1,5 +1,5 @@
 """artifact-gateway — Secure API gateway for AI-generated artifact apps."""
-__version__ = "0.3.0"
+__version__ = "0.3.1"
 
 from artifact_gateway.token import (
     issue_app_token,
