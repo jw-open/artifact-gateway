@@ -7,9 +7,9 @@
 
 Secure API gateway for AI-generated artifact apps — external HTTPS proxy, internal API forwarding, and user-isolated database access with JWT-scoped auth tokens.
 
-![artifact-gateway demo — an AI-generated interactive dashboard pulling live data and rendering it in the browser, routed through the gateway](https://raw.githubusercontent.com/jw-open/artifact-gateway/main/assets/demo.gif)
+[![artifact-gateway demo — an AI-generated interactive dashboard pulling live data and rendering it in the browser, routed through the gateway](https://raw.githubusercontent.com/jw-open/artifact-gateway/main/assets/demo.gif)](https://youtu.be/_F_IoHiLo6s)
 
-*Above: an AI-generated artifact (a live FIFA forecast dashboard) calls external APIs and isolated data through artifact-gateway — no secrets in the page, no raw network access.*
+*Above: an AI-generated artifact (a live FIFA forecast dashboard) calls external APIs and isolated data through artifact-gateway — no secrets in the page, no raw network access. ▶ [Watch the full walkthrough](https://youtu.be/_F_IoHiLo6s)*
 
 ---
 
